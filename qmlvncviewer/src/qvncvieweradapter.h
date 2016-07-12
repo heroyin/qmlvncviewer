@@ -108,7 +108,10 @@ protected:
     static const int MOUSE_WUP    = 8;
     static const int MOUSE_WDOWN  = 16;
 signals:
+
     void updateRect(const QRect rect);
+
+    void onPropChanged();
 private:
     void repaint(QRect rect);
 private:

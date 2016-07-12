@@ -10,6 +10,7 @@ QVncViewerAdapter::QVncViewerAdapter():
     m_bufferImage(NULL),
     m_width(0),
     m_height(0),
+    m_buttonMask(0),
     m_bitsPerPixel(0)
 {
 
@@ -46,6 +47,7 @@ void QVncViewerAdapter::start(QString host, int port, QString password)
         delete m_viewerCore;
         m_viewerCore = NULL;
     }
+    m_buttonMask = 0;
 
     m_viewerCore = new RemoteViewerCore(&logger);
     m_viewerCore->setPreferredEncoding(EncodingDefs::ZRLE);
@@ -392,5 +394,7 @@ void QVncViewerAdapter::onFrameBufferPropChange(const FrameBuffer *fb)
                 dimension.getRect().bottom-dimension.getRect().top);
         repaint(r);
     }
+
+    emit onPropChanged();
 }
 
