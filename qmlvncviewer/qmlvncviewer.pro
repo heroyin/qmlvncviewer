@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = qmlvncviewer
-QT += qml quick
+QT += qml quick widgets
 CONFIG += qt plugin c++11
 
 TARGET = $$qtLibraryTarget($$TARGET)
@@ -39,14 +39,16 @@ SOURCES += \
     src/qquickvncviewer.cpp \
     src/qvncvieweradapter.cpp \
     src/viewervncauthhandler.cpp \
-    src/vnclogger.cpp
+    src/vnclogger.cpp \
+    src/vncutils.cpp
 
 HEADERS += \
     src/qmlvncviewer_plugin.h \
     src/qquickvncviewer.h \
     src/qvncvieweradapter.h \
     src/viewervncauthhandler.h \
-    src/vnclogger.h
+    src/vnclogger.h \
+    src/vncutils.h
 
 DISTFILES = qmldir
 

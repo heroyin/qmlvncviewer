@@ -8,6 +8,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QHoverEvent>
+#include <QClipboard>
 
 #include "vnclogger.h"
 #include "viewervncauthhandler.h"
@@ -18,6 +19,8 @@
 #define XK_MISCELLANY
 #include "rfb/RfbKeySym.h"
 #include "rfb/keysymdef.h"
+
+#pragma warning( disable : 4100)
 
 class QVncViewerAdapter: public QObject, protected CoreEventsAdapter
 {
@@ -112,6 +115,13 @@ signals:
     void updateRect(const QRect rect);
 
     void onPropChanged();
+
+    void onCuttext(QString text);
+
+public slots:
+
+    void handleDataChanged();
+    void handleCutText(QString text);
 private:
     void repaint(QRect rect);
 private:
@@ -127,6 +137,7 @@ private:
     QVector<QRgb> m_colorTable;
     Dimension m_serverDimension;
     ViewerVncAuthHandler m_vncAuthHandler;
+    QClipboard *m_clipboard;
 
     int m_width;
     int m_height;

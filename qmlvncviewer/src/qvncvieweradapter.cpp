@@ -1,5 +1,10 @@
 ﻿#include "qvncvieweradapter.h"
 
+#include <QApplication>
+
+#include "util/Utf8StringStorage.h"
+#include "vncutils.h"
+
 QRect rectToQRect(Rect r)
 {
     return QRect(r.left, r.top, r.right-r.left, r.bottom-r.top);
@@ -13,6 +18,9 @@ QVncViewerAdapter::QVncViewerAdapter():
     m_buttonMask(0),
     m_bitsPerPixel(0)
 {
+    m_clipboard = QApplication::clipboard();
+    connect(m_clipboard, SIGNAL(dataChanged()), this, SLOT(handleDataChanged()), Qt::QueuedConnection);
+    connect(this, SIGNAL(onCuttext(QString)), this, SLOT(handleCutText(QString)), Qt::QueuedConnection);
 
 }
 
@@ -298,7 +306,10 @@ void QVncViewerAdapter::onBell()
 void QVncViewerAdapter::onCutText(const StringStorage *cutText)
 {
     qInfo() << "[VNC_EVENT] onCutText";
+    QString text = stringStorageToQString(cutText);
+    qInfo() << "text is " << text;
 
+    emit onCuttext(text);
 }
 
 void QVncViewerAdapter::onEstablished()
@@ -396,5 +407,18 @@ void QVncViewerAdapter::onFrameBufferPropChange(const FrameBuffer *fb)
     }
 
     emit onPropChanged();
+}
+
+void QVncViewerAdapter::handleDataChanged()
+{
+    if(m_clipboard->text().isEmpty())
+        return;
+
+    m_viewerCore->sendCutTextEvent(&qStringToStringStorage(m_clipboard->text()));
+}
+
+void QVncViewerAdapter::handleCutText(QString text)
+{
+    m_clipboard->setText(text);
 }
 
