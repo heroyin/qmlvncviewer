@@ -1,3 +1,5 @@
+include($$PWD/../defines.pri)
+
 TEMPLATE = lib
 TARGET = qmlvncviewer
 QT += qml quick widgets
@@ -20,6 +22,8 @@ win32 {
         BUILD=release
     }
 }
+
+QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
 
 BASE_DESTDIR = $$PWD/../../build/vncviewer/$$BUILD
 
